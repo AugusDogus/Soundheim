@@ -14,6 +14,20 @@ public sealed class LivePulseAudioTests
 {
     [TestMethod]
     [TestCategory("LiveAudio")]
+    public void ListsHostOutputsFromTheSteamRuntime()
+    {
+        if (Environment.GetEnvironmentVariable("SOUNDHEIM_LIVE_AUDIO_TEST") != "1")
+            Assert.Inconclusive("Set SOUNDHEIM_LIVE_AUDIO_TEST=1 inside the Steam runtime to check host output discovery.");
+        var result = new PulseAudioBackend(Environment.ProcessId, new Pactl().Run).ListOutputs();
+        if (result is AudioResult<System.Collections.Generic.IReadOnlyList<AudioDevice>>.Failure failure)
+            Assert.Fail(failure.Message);
+        Assert.IsInstanceOfType<AudioResult<System.Collections.Generic.IReadOnlyList<AudioDevice>>.Success>(result);
+        if (result is AudioResult<System.Collections.Generic.IReadOnlyList<AudioDevice>>.Success success)
+            Assert.IsTrue(success.Value.Count > 0, "Expected the workstation's connected outputs.");
+    }
+
+    [TestMethod]
+    [TestCategory("LiveAudio")]
     public void RoutesASilentTestStreamWithoutMovingTheControlStreamOrSystemDefault()
     {
         if (Environment.GetEnvironmentVariable("SOUNDHEIM_LIVE_AUDIO_TEST") != "1")

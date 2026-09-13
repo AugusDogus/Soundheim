@@ -55,6 +55,11 @@ To run the optional Linux integration test, prefix the check command with
 null sink and two silent test streams, checks that only the selected stream moves,
 then removes them. It does not route the real game's audio or change the system default.
 
+The `ListsHostOutputsFromTheSteamRuntime` live test also runs inside Steam's
+Soldier runtime to verify audio discovery when the container has no `pactl`.
+In that case, the mod calls `steam-runtime-launch-client --alongside-steam`
+to run the host command. Arguments stay separate, without a command shell.
+
 Windows support is experimental and has not been run on Windows. It uses an
 undocumented per-app audio policy interface, with IDs and ABI layout referenced
 from EarTrumpet. Check Windows 10 and 11 with speakers, USB/Bluetooth devices,

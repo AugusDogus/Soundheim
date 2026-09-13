@@ -1,27 +1,47 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Soundheim.Audio;
 
 internal sealed class Pactl
 {
-    public string Run(params string[] arguments)
+    private const string SteamLauncher = "/usr/bin/steam-runtime-launch-client";
+
+    private static ProcessStartInfo StartInfo(string[] arguments, bool host)
     {
-        var start = new ProcessStartInfo("pactl")
+        var start = new ProcessStartInfo(host ? SteamLauncher : "pactl")
         {
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             CreateNoWindow = true
         };
+        if (host)
+            foreach (string argument in new[] { "--alongside-steam", "--env=LC_ALL=C", "--", "pactl" }) start.ArgumentList.Add(argument);
         foreach (string argument in arguments) start.ArgumentList.Add(argument);
         start.Environment["LC_ALL"] = "C";
-        using var process = new Process { StartInfo = start };
-        try { process.Start(); }
+        return start;
+    }
+
+    public string Run(params string[] arguments)
+    {
+        using var process = new Process { StartInfo = StartInfo(arguments, false) };
+        try
+        {
+            try { process.Start(); }
+            catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 2 && File.Exists(SteamLauncher))
+            {
+                // Steam's game container omits pactl. Its launcher runs the host copy
+                // with host libraries and audio-service access, preserving argument boundaries.
+                process.StartInfo = StartInfo(arguments, true);
+                process.Start();
+            }
+        }
         catch (System.ComponentModel.Win32Exception ex)
         {
-            throw new InvalidOperationException("Cannot start pactl. Install PulseAudio client tools and enable PulseAudio or PipeWire's PulseAudio service.", ex);
+            throw new InvalidOperationException($"Cannot launch the audio command '{process.StartInfo.FileName}' (error {ex.NativeErrorCode}): {ex.Message}. Check that PulseAudio client tools are installed and Steam's launcher service is running.", ex);
         }
         Task<string> output = process.StandardOutput.ReadToEndAsync();
         Task<string> error = process.StandardError.ReadToEndAsync();
