@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <title>Soundheim headphones emblem</title>
+  <title>Custom Audio Output Device headphones emblem</title>
   <rect width="256" height="256" fill="#213d36"/>
   <circle cx="128" cy="128" r="101" fill="none" stroke="#a98a59" stroke-width="3"/>
   <path d="M65 144V113a63 63 0 0 1 126 0v31" fill="none" stroke="#f1dfb7" stroke-width="14"/>

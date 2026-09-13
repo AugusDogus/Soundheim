@@ -31,7 +31,7 @@ internal sealed class NativeAudioSettings : MonoBehaviour
         TMP_Text? font = lastControl.GetComponentInChildren<TMP_Text>(true);
         if (template == null || font == null)
         {
-            Plugin.Instance.ReportError("Soundheim could not find Valheim's native audio label or dropdown. Check compatibility with this Valheim version.");
+            Plugin.Instance.ReportError($"{Plugin.PluginName} could not find Valheim's native audio label or dropdown. Check compatibility with this Valheim version.");
             return;
         }
         var component = audio.gameObject.AddComponent<NativeAudioSettings>();

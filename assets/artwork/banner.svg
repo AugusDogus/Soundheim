@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600" viewBox="0 0 1600 600">
-  <title>Soundheim: choose where Valheim plays</title>
+  <title>Custom Audio Output Device: choose where Valheim plays</title>
   <rect width="1600" height="600" fill="#213d36"/>
   <path d="M56 48h1488v504H56z" fill="none" stroke="#a98a59" stroke-width="2"/>
   <g transform="translate(100 116) scale(1.45)">
@@ -9,6 +9,9 @@
     <rect x="168" y="125" width="34" height="61" rx="10" fill="#f1dfb7"/>
     <path d="M111 127v39m17-53v67m17-53v39" stroke="#a98a59" stroke-width="8" stroke-linecap="round"/>
   </g>
-  <text x="530" y="292" font-family="DejaVu Serif,serif" font-size="106" letter-spacing="5" fill="#f1dfb7">SOUNDHEIM</text>
-  <text x="536" y="363" font-family="DejaVu Sans,sans-serif" font-size="32" fill="#d0c4a7">Choose where Valheim plays.</text>
+  <g font-family="DejaVu Serif,serif" font-size="78" letter-spacing="3" fill="#f1dfb7">
+    <text x="530" y="254">CUSTOM AUDIO</text>
+    <text x="530" y="346">OUTPUT DEVICE</text>
+  </g>
+  <text x="536" y="415" font-family="DejaVu Sans,sans-serif" font-size="30" fill="#d0c4a7">Choose where Valheim plays.</text>
 </svg>

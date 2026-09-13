@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="package/banner.png" alt="Soundheim: audio output controls for Valheim" width="900">
+  <img src="package/banner.png" alt="Custom Audio Output Device for Valheim" width="900">
 </p>
 
-# Soundheim
+# Custom Audio Output Device
 
 Choose where Valheim plays its audio, directly in **Settings → Audio**.
 Only the player needs this mod. Nothing is installed on the server.
@@ -15,7 +15,7 @@ Only the player needs this mod. Nothing is installed on the server.
 
 **System default** follows your operating system's default output. The mod routes
 Valheim's audio; it does not change the system default or move other applications.
-Device lists refresh automatically. If your selected device disconnects, Soundheim
+Device lists refresh automatically. If your selected device disconnects, the mod
 keeps its preference and retries when it returns.
 
 ## Platforms

@@ -1,5 +1,9 @@
 # Development
 
+The public mod name is **Custom Audio Output Device** and the Thunderstore
+package identifier is `Custom_Audio_Output_Device`. The repository, project,
+DLL, and existing configuration identity retain the internal name `Soundheim`.
+
 ## Build
 
 Install .NET SDK 8 and Bun 1.4.1 or newer. Run `bun install --frozen-lockfile`

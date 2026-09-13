@@ -10,10 +10,11 @@ using UnityEngine;
 
 namespace Soundheim;
 
-[BepInPlugin(PluginId, "Soundheim", PluginVersion)]
+[BepInPlugin(PluginId, PluginName, PluginVersion)]
 public sealed class Plugin : BaseUnityPlugin
 {
     public const string PluginId = "augusdogus.mods.Soundheim";
+    public const string PluginName = "Custom Audio Output Device";
     public const string PluginVersion = "1.0.0";
 
     internal static Plugin? Instance { get; private set; }
@@ -42,13 +43,13 @@ public sealed class Plugin : BaseUnityPlugin
         using var process = Process.GetCurrentProcess();
         if (Application.platform == RuntimePlatform.LinuxPlayer) backend = new PulseAudioBackend(process.Id, new Pactl().Run);
         else if (Application.platform == RuntimePlatform.WindowsPlayer) backend = new WindowsAudioBackend(process.Id);
-        else { Logger.LogWarning("Soundheim supports Linux and Windows only."); enabled = false; return; }
+        else { Logger.LogWarning($"{PluginName} supports Linux and Windows only."); enabled = false; return; }
         preference = Config.Bind("Audio", "Output device", "", "Stable output identifier. Empty follows the system default. Select a device in Settings > Audio.");
         Selection = preference.Value;
         preference.SettingChanged += PreferenceChanged;
         Instance = this;
         harmony.PatchAll(typeof(NativeAudioSettings).Assembly);
-        Logger.LogInfo("Soundheim loaded. Select your output in Settings > Audio.");
+        Logger.LogInfo($"{PluginName} loaded. Select your output in Settings > Audio.");
     }
 
     internal void Preview(string id)
