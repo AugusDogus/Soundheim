@@ -19,6 +19,10 @@ public sealed class GameCompatibilityTests
         foreach (string name in new[] { "Initialize", "OnTabOpen", "OnOkAsync", "OnBack" })
             Assert.AreEqual(1, audio.Methods.Count(method => method.Name == name), $"Audio hook {name} changed.");
         Assert.AreEqual("UnityEngine.UI.Toggle", audio.Fields.Single(field => field.Name == "m_continousMusic").FieldType.FullName);
+        Assert.AreEqual("UnityEngine.UI.Slider", audio.Fields.Single(field => field.Name == "m_volumeSlider").FieldType.FullName);
+        Assert.AreEqual("TMPro.TMP_Text", audio.Fields.Single(field => field.Name == "m_volumeText").FieldType.FullName);
+        TypeDefinition graphics = game.MainModule.Types.Single(type => type.FullName == "Valheim.SettingsGui.GraphicsSettings");
+        Assert.AreEqual("GUIFramework.GuiDropdown", graphics.Fields.Single(field => field.Name == "m_resolutionDropdown").FieldType.FullName);
         var open = audio.Methods.Single(method => method.Name == "OnTabOpen");
         CollectionAssert.AreEqual(new[] { "backButton", "okButton" }, open.Parameters.Select(parameter => parameter.Name).ToArray());
         using var gui = AssemblyDefinition.ReadAssembly(Path.Combine(managed, "gui_framework.dll"));
