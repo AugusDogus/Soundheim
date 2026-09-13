@@ -1,0 +1,10 @@
+{
+  "name": "Soundheim",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/AugusDogus/Soundheim",
+  "description": "Choose Valheim's audio output in game. Linux PulseAudio/PipeWire support; experimental, untested Windows support.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2350",
+    "ValheimModding-Jotunn-2.30.0"
+  ]
+}

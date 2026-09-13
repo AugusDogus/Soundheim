@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Valheim mod template</title>
+  <rect width="256" height="256" rx="32" fill="#213d36"/>
+  <path d="M55 58L128 202L201 58H161L128 128L95 58Z" fill="#f1dfb7"/>
+</svg>

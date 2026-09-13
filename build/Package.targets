@@ -1,0 +1,6 @@
+<Project>
+  <Target Name="Package" DependsOnTargets="Build">
+    <Exec WorkingDirectory="$(MSBuildThisFileDirectory).."
+          Command="bun run scripts/validate-package.ts --assembly &quot;$(TargetPath)&quot;" />
+  </Target>
+</Project>

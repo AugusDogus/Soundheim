@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>Soundheim</AssemblyName>
+    <RootNamespace>Soundheim</RootNamespace>
+    <LangVersion>12</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Version>1.0.0</Version>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="JotunnLib" Version="2.30.0" ExcludeAssets="all" GeneratePathProperty="true" />
+    <Reference Include="$(PkgJotunnLib)/lib/net462/Jotunn.dll" Private="false" ExternallyResolved="true" />
+    <Reference Include="$(ManagedDir)/Newtonsoft.Json.dll" Private="false" />
+    <!-- Unity supplies the game's transitive runtime dependencies. -->
+    <Reference Include="$(ManagedDir)/assembly_valheim.dll" Private="false" ExternallyResolved="true" />
+    <Reference Include="$(ManagedDir)/UnityEngine*.dll" Private="false" />
+    <Reference Include="$(BepInExDir)/core/BepInEx.dll" Private="false" />
+    <Reference Include="$(BepInExDir)/core/0Harmony.dll" Private="false" />
+  </ItemGroup>
+  <Target Name="ValidateGameReferences" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(ManagedDir)/assembly_valheim.dll')" Text="Valheim assemblies were not found in $(ManagedDir). Set GameDir or ManagedDir to your installation." />
+    <Error Condition="!Exists('$(BepInExDir)/core/BepInEx.dll')" Text="BepInEx was not found in $(BepInExDir). Set BepInExDir to your mod profile's BepInEx directory." />
+  </Target>
+  <Import Project="../../build/Package.targets" />
+</Project>
