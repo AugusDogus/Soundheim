@@ -49,6 +49,7 @@ public sealed class Plugin : BaseUnityPlugin
         preference.SettingChanged += PreferenceChanged;
         Instance = this;
         harmony.PatchAll(typeof(NativeAudioSettings).Assembly);
+        NativeAudioSettings.AttachCurrent();
         Logger.LogInfo($"{PluginName} loaded. Select your output in Settings > Audio.");
     }
 
@@ -63,6 +64,11 @@ public sealed class Plugin : BaseUnityPlugin
     internal void Save() { if (preference != null) preference.Value = Selection; }
     internal void Revert() { if (preference != null && Selection != preference.Value) Preview(preference.Value); }
     internal void Refresh() => nextPoll = 0;
+    public Task PrepareForReload()
+    {
+        enabled = false;
+        return pending == null ? Task.CompletedTask : pending;
+    }
     private void PreferenceChanged(object sender, EventArgs args) { if (preference != null) Preview(preference.Value); }
 
     private void Update()
@@ -96,7 +102,7 @@ public sealed class Plugin : BaseUnityPlugin
 
     internal void ReportError(string message)
     {
-        Status = message;
+        Status = "Couldn't update audio output. Retrying automatically. Details are in the game log.";
         if (message == lastError) return;
         lastError = message;
         Logger.LogWarning(message);
@@ -106,6 +112,11 @@ public sealed class Plugin : BaseUnityPlugin
     {
         if (preference != null) preference.SettingChanged -= PreferenceChanged;
         harmony.UnpatchSelf();
+        if (Settings.instance != null)
+            foreach (NativeAudioSettings view in Settings.instance.GetComponentsInChildren<NativeAudioSettings>(true))
+                UnityEngine.Object.Destroy(view);
+        BepInEx.Logging.Logger.Sources.Remove(Logger);
+        Logger.Dispose();
         if (Instance == this) Instance = null;
     }
 }
