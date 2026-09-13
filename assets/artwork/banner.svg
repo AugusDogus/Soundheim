@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600" viewBox="0 0 1600 600">
+  <title>Soundheim: choose where Valheim plays</title>
+  <rect width="1600" height="600" fill="#213d36"/>
+  <path d="M56 48h1488v504H56z" fill="none" stroke="#a98a59" stroke-width="2"/>
+  <g transform="translate(100 116) scale(1.45)">
+    <circle cx="128" cy="128" r="101" fill="none" stroke="#a98a59" stroke-width="3"/>
+    <path d="M65 144V113a63 63 0 0 1 126 0v31" fill="none" stroke="#f1dfb7" stroke-width="14"/>
+    <rect x="54" y="125" width="34" height="61" rx="10" fill="#f1dfb7"/>
+    <rect x="168" y="125" width="34" height="61" rx="10" fill="#f1dfb7"/>
+    <path d="M111 127v39m17-53v67m17-53v39" stroke="#a98a59" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <text x="530" y="292" font-family="DejaVu Serif,serif" font-size="106" letter-spacing="5" fill="#f1dfb7">SOUNDHEIM</text>
+  <text x="536" y="363" font-family="DejaVu Sans,sans-serif" font-size="32" fill="#d0c4a7">Choose where Valheim plays.</text>
+</svg>

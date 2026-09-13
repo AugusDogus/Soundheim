@@ -1,21 +1,44 @@
+<p align="center">
+  <img src="package/banner.png" alt="Soundheim: audio output controls for Valheim" width="900">
+</p>
+
 # Soundheim
 
-A client-side Valheim mod built with BepInEx 5.
+Choose where Valheim plays its audio, directly in **Settings → Audio**.
+Only the player needs this mod. Nothing is installed on the server.
+
+## Use
+
+1. Open **Settings → Audio** from the main menu or while playing.
+2. Choose **Output device**, below the existing audio controls. Changes preview immediately.
+3. Click **OK** to remember your choice. **Back** restores the saved choice.
+
+**System default** follows your operating system's default output. The mod routes
+Valheim's audio; it does not change the system default or move other applications.
+Device lists refresh automatically. If your selected device disconnects, Soundheim
+keeps its preference and retries when it returns.
+
+## Platforms
+
+| Platform | Support |
+| --- | --- |
+| Linux with PulseAudio or PipeWire's PulseAudio service | Audio routing tested locally; requires `pactl` with JSON output support |
+| Windows 10/11 | **Experimental and untested**. Uses Windows per-app audio preferences. If an existing stream does not move, save the selection and restart Valheim. |
+| macOS | Not supported |
+
+The Audio tab shows routing errors and whether a selected device is disconnected.
+Detailed errors also appear in `BepInEx/LogOutput.log`.
 
 ## Installation
 
-Install BepInExPack_Valheim 5.4.2350 in your mod profile. Copy `Soundheim.dll`
-from a release ZIP into `BepInEx/plugins/Soundheim/`, then start the game modded.
+Requires BepInExPack Valheim. Import the local package into r2modman, or copy
+`Soundheim.dll` into `BepInEx/plugins/Soundheim` in your profile, then restart Valheim.
 
-## Build
+Configuration is stored in `BepInEx/config/augusdogus.mods.Soundheim.cfg`.
+Windows also persists the per-app output preference in the operating system.
+Choose **System default** and save before removing the mod if you want to clear it.
 
-```sh
-bun install --frozen-lockfile
-dotnet build src/Soundheim/Soundheim.csproj -c Release -t:Package \
-  -p:GameDir="/path/to/Valheim" \
-  -p:BepInExDir="/path/to/profile/BepInEx"
-```
+## Development
 
-Requires .NET SDK 8 and Bun 1.4.1+. Output: `artifacts/Soundheim-1.0.0.zip`.
-
-[Development and releases](docs/DEVELOPMENT.md) · [Repository layout](docs/REPOSITORY.md) · [Using the template](docs/TEMPLATE.md)
+See [development and testing](docs/DEVELOPMENT.md) and [repository layout](docs/REPOSITORY.md).
+Release tooling comes from [ValheimModTemplate](https://github.com/AugusDogus/ValheimModTemplate).

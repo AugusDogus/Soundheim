@@ -1,5 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <title>Valheim mod template</title>
-  <rect width="256" height="256" rx="32" fill="#213d36"/>
-  <path d="M55 58L128 202L201 58H161L128 128L95 58Z" fill="#f1dfb7"/>
+  <title>Soundheim headphones emblem</title>
+  <rect width="256" height="256" fill="#213d36"/>
+  <circle cx="128" cy="128" r="101" fill="none" stroke="#a98a59" stroke-width="3"/>
+  <path d="M65 144V113a63 63 0 0 1 126 0v31" fill="none" stroke="#f1dfb7" stroke-width="14"/>
+  <rect x="54" y="125" width="34" height="61" rx="10" fill="#f1dfb7"/>
+  <rect x="168" y="125" width="34" height="61" rx="10" fill="#f1dfb7"/>
+  <path d="M111 127v39m17-53v67m17-53v39" stroke="#a98a59" stroke-width="8" stroke-linecap="round"/>
 </svg>

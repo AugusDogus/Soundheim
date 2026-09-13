@@ -14,6 +14,6 @@ internal sealed class WindowsAudioBackend(int processId) : IAudioBackend
             return "Selected output is disconnected. Keeping your preference and waiting for it to return.";
         using var policy = new WindowsAudioPolicy();
         policy.Apply((uint)processId, deviceId);
-        return "Output preference applied (Windows experimental). If audio hasn't moved, restart Valheim.";
+        return "Output preference applied. If audio hasn't moved, restart Valheim.";
     });
 }

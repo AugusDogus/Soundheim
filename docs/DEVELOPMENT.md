@@ -41,6 +41,23 @@ bun test tests/
 
 The TypeScript package checks and JavaScript version checks use Bun's test runner.
 
+The C# tests cover device discovery, exact process-ID filtering, default-device
+selection, reconnects, failures, and the private game fields used by the settings hooks.
+They do not render Unity UI. Check the Audio tab's layout, dropdown navigation,
+preview, OK, Back, and reopening settings in game before releasing.
+
+To run the optional Linux integration test, prefix the check command with
+`SOUNDHEIM_LIVE_AUDIO_TEST=1`. It requires `pactl` and `pacat`, creates a temporary
+null sink and two silent test streams, checks that only the selected stream moves,
+then removes them. It does not route the real game's audio or change the system default.
+
+Windows support is experimental and has not been run on Windows. It uses an
+undocumented per-app audio policy interface, with IDs and ABI layout referenced
+from EarTrumpet. Check Windows 10 and 11 with speakers, USB/Bluetooth devices,
+unplug/reconnect, System default, and OK/Back before changing this support label.
+Native handles and COM apartments are released on the worker thread. The code
+never calls a system-wide default-endpoint setter.
+
 ## Package
 
 Add `-t:Package` to the Release build command. The TypeScript script creates and validates
