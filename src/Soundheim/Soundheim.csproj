@@ -9,8 +9,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="JotunnLib" Version="2.30.0" ExcludeAssets="all" GeneratePathProperty="true" />
-    <Reference Include="$(PkgJotunnLib)/lib/net462/Jotunn.dll" Private="false" ExternallyResolved="true" />
+    <Reference Include="$(ManagedDir)/gui_framework.dll" Private="false" ExternallyResolved="true" />
+    <Reference Include="$(ManagedDir)/assembly_guiutils.dll" Private="false" ExternallyResolved="true" />
+    <Reference Include="$(ManagedDir)/Unity.TextMeshPro.dll" Private="false" ExternallyResolved="true" />
     <Reference Include="$(ManagedDir)/Newtonsoft.Json.dll" Private="false" />
     <!-- Unity supplies the game's transitive runtime dependencies. -->
     <Reference Include="$(ManagedDir)/assembly_valheim.dll" Private="false" ExternallyResolved="true" />

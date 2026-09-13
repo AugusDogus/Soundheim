@@ -10,6 +10,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.6.4" />
     <PackageReference Include="MSTest.TestFramework" Version="3.6.4" />
     <Reference Include="$(ManagedDir)/Newtonsoft.Json.dll" />
+    <Reference Include="$(BepInExDir)/core/Mono.Cecil.dll" />
     <Compile Include="../../src/Soundheim/Audio/*.cs" Link="Audio/%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>
