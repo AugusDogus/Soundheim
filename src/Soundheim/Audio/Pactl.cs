@@ -22,6 +22,9 @@ internal sealed class Pactl
             foreach (string argument in new[] { "--alongside-steam", "--env=LC_ALL=C", "--", "pactl" }) start.ArgumentList.Add(argument);
         foreach (string argument in arguments) start.ArgumentList.Add(argument);
         start.Environment["LC_ALL"] = "C";
+        // Doorstop hooks dup2 in preloaded child processes, which breaks Steam's
+        // launcher. Audio utilities must not inherit the game's injected libraries.
+        start.Environment.Remove("LD_PRELOAD");
         return start;
     }
 

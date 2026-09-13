@@ -14,6 +14,28 @@ public sealed class LivePulseAudioTests
 {
     [TestMethod]
     [TestCategory("LiveAudio")]
+    [DoNotParallelize]
+    public void ListsHostOutputsDespiteInheritedDoorstopPreload()
+    {
+        string? library = Environment.GetEnvironmentVariable("SOUNDHEIM_TEST_PRELOAD");
+        if (string.IsNullOrEmpty(library)) Assert.Inconclusive("Set SOUNDHEIM_TEST_PRELOAD to the installed Doorstop library inside Steam's runtime.");
+        string? previous = Environment.GetEnvironmentVariable("LD_PRELOAD");
+        string? previousEnabled = Environment.GetEnvironmentVariable("DOORSTOP_ENABLED");
+        try
+        {
+            Environment.SetEnvironmentVariable("LD_PRELOAD", library);
+            Environment.SetEnvironmentVariable("DOORSTOP_ENABLED", "1");
+            ListsHostOutputsFromTheSteamRuntime();
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("LD_PRELOAD", previous);
+            Environment.SetEnvironmentVariable("DOORSTOP_ENABLED", previousEnabled);
+        }
+    }
+
+    [TestMethod]
+    [TestCategory("LiveAudio")]
     public void ListsHostOutputsFromTheSteamRuntime()
     {
         if (Environment.GetEnvironmentVariable("SOUNDHEIM_LIVE_AUDIO_TEST") != "1")
