@@ -22,22 +22,6 @@ internal sealed class NativeAudioSettings : MonoBehaviour
     private RectTransform? rowRect, parentRect, previousRect, sliderRect, volumeRect, labelRect;
     private readonly Vector3[] corners = new Vector3[4];
 
-    internal static void AttachCurrent()
-    {
-        if (Settings.instance == null) return;
-        var audio = Settings.instance.GetComponentInChildren<GameAudioSettings>(true);
-        if (audio == null) return;
-        if (AccessTools.Field(typeof(GameAudioSettings), "m_continousMusic").GetValue(audio) is Toggle toggle &&
-            AccessTools.Field(typeof(GameAudioSettings), "m_volumeSlider").GetValue(audio) is Slider slider &&
-            AccessTools.Field(typeof(GameAudioSettings), "m_volumeText").GetValue(audio) is TMP_Text text)
-        {
-            Attach(audio, toggle, slider, text);
-            if (AccessTools.Field(typeof(Settings), "m_backButton").GetValue(Settings.instance) is Button back &&
-                AccessTools.Field(typeof(Settings), "m_okButton").GetValue(Settings.instance) is Button ok)
-                audio.GetComponent<NativeAudioSettings>()?.SetNavigation(toggle, back, ok);
-        }
-    }
-
     internal static void Attach(GameAudioSettings audio, Toggle lastControl, Slider volume, TMP_Text volumeText)
     {
         if (Plugin.Instance == null || audio.GetComponent<NativeAudioSettings>() != null) return;
@@ -159,6 +143,12 @@ internal sealed class NativeAudioSettings : MonoBehaviour
         field.pivot = new Vector2(0, 1);
         field.anchoredPosition = new Vector2(left, 0);
         field.sizeDelta = new Vector2(Math.Max(200, right - left), 40);
+        if (status != null)
+        {
+            status.rectTransform.anchorMin = status.rectTransform.anchorMax = new Vector2(0, 1);
+            status.rectTransform.anchoredPosition = new Vector2(left, -48);
+            status.rectTransform.sizeDelta = new Vector2(Math.Max(200, right - left), 64);
+        }
     }
 
     private void Update()
@@ -206,7 +196,6 @@ internal sealed class NativeAudioSettings : MonoBehaviour
     {
         if (dropdown != null) dropdown.OnExpandedStateChange -= Expanded;
         plugin?.Revert();
-        if (rowRect != null) Destroy(rowRect.gameObject);
     }
 
     [HarmonyPatch(typeof(GameAudioSettings), "Initialize")]

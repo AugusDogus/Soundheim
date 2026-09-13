@@ -2,6 +2,7 @@
 
 ## 1.0.0 (unreleased)
 
+- Show the selected output only in the dropdown, with actionable notices below it.
 - Support host audio commands when running inside Steam's Linux runtime.
 - Align the output dropdown with native audio controls and remove the copied dropdown label.
 - Add a native Output device dropdown to Valheim's Audio settings.

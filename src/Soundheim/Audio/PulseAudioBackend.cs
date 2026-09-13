@@ -37,7 +37,7 @@ internal sealed class PulseAudioBackend(int processId, Func<string[], string> co
                 command(["move-sink-input", index.ToString(CultureInfo.InvariantCulture), sink.Device.Id]);
         }
         return count == 0 ? "Waiting for Valheim's audio stream. Your selection will apply when it starts." :
-            $"Output: {sink.Device.Name}";
+            "";
     });
 
     internal static IReadOnlyList<Sink> ReadSinks(string json)

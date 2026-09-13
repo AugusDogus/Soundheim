@@ -50,6 +50,7 @@ public sealed class PulseAudioTests
             """ };
         var result = new PulseAudioBackend(42, server.Run).Route("headset");
         Assert.IsInstanceOfType<AudioResult<string>.Success>(result);
+        if (result is AudioResult<string>.Success success) Assert.AreEqual("", success.Value);
         Assert.AreEqual(2, server.Moves.Count);
         CollectionAssert.AreEqual(new[] { "move-sink-input", "1", "headset" }, server.Moves[0]);
         CollectionAssert.AreEqual(new[] { "move-sink-input", "4", "headset" }, server.Moves[1]);
