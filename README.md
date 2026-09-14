@@ -31,8 +31,9 @@ Detailed errors also appear in `BepInEx/LogOutput.log`.
 
 ## Installation
 
-Requires BepInExPack Valheim. Import the local package into r2modman, or copy
-`Soundheim.dll` into `BepInEx/plugins/Soundheim` in your profile, then restart Valheim.
+Install **Custom Audio Output Device** through r2modman or Thunderstore Mod Manager.
+Requires BepInExPack Valheim. For manual installation, copy `Soundheim.dll` into
+`BepInEx/plugins/Soundheim` in your profile, then restart Valheim.
 
 Configuration is stored in `BepInEx/config/augusdogus.mods.Soundheim.cfg`.
 Windows also persists the per-app output preference in the operating system.

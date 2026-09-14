@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 (unreleased)
+## 1.0.0 (2026-09-14)
 
 - Show the selected output only in the dropdown, with actionable notices below it.
 - Support host audio commands when running inside Steam's Linux runtime.
