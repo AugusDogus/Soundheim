@@ -16,6 +16,7 @@ internal sealed class AudioDeviceTooltips(GameObject prefab, UITooltip selected)
             prefab.name = "Audio device tooltip template";
             prefab.SetActive(false);
             foreach (TMP_Text text in prefab.GetComponentsInChildren<TMP_Text>(true)) text.richText = false;
+            prefab.AddComponent<AudioTooltipSize>();
             UITooltip selected = Attach(dropdown.gameObject, prefab, dropdown.captionText?.text ?? "");
             return new AudioDeviceTooltips(prefab, selected);
         }

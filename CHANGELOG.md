@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fit tooltips to short device names while keeping long names wrapped at the native maximum width.
 - Show full device names in native hover tooltips on the dropdown and its options.
 - Keep long output names inside the dropdown with bounded font sizing and ellipsis.
 - Wrap status notices and hide them while the device menu is open.
