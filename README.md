@@ -23,7 +23,7 @@ keeps its preference and retries when it returns.
 | Platform | Support |
 | --- | --- |
 | Linux with PulseAudio or PipeWire's PulseAudio service | Audio routing tested locally; requires `pactl` with JSON output support |
-| Windows 10/11 | **Experimental and untested**. Uses Windows per-app audio preferences. If an existing stream does not move, save the selection and restart Valheim. |
+| Windows 10/11 | **Experimental**, with a successful user test on Windows. Uses Windows per-app audio preferences. If an existing stream does not move, save the selection and restart Valheim. |
 | macOS | Not supported |
 
 The Audio tab shows routing errors and whether a selected device is disconnected.
