@@ -7,7 +7,7 @@
 - Show full device names in native hover tooltips on the dropdown and its options.
 - Keep long output names inside the dropdown with bounded font sizing and ellipsis.
 - Wrap status notices and hide them while the device menu is open.
-- Record a successful Windows user test while retaining the experimental support label.
+- Support Windows audio device selection without an experimental notice.
 
 ## 1.0.0 (2026-09-14)
 

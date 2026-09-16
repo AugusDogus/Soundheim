@@ -21,7 +21,6 @@ public sealed class Plugin : BaseUnityPlugin
     internal IReadOnlyList<AudioDevice> Devices { get; private set; } = Array.Empty<AudioDevice>();
     internal string Selection { get; private set; } = "";
     internal string Status { get; private set; } = "Reading audio outputs...";
-    internal bool Experimental => Application.platform == RuntimePlatform.WindowsPlayer;
     private ConfigEntry<string>? preference;
     private IAudioBackend? backend;
     private Task<PollResult>? pending;
