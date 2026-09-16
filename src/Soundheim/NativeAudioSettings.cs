@@ -14,6 +14,7 @@ internal sealed class NativeAudioSettings : MonoBehaviour
 {
     private GuiDropdown? dropdown;
     private TMP_Text? status;
+    private AudioDeviceTooltips? tooltips;
     private readonly List<string> identifiers = new();
     private IReadOnlyList<Audio.AudioDevice>? shownDevices;
     private string shownSelection = "";
@@ -89,6 +90,8 @@ internal sealed class NativeAudioSettings : MonoBehaviour
         status.alignment = TextAlignmentOptions.TopLeft;
         status.textWrappingMode = TextWrappingModes.Normal;
         status.overflowMode = TextOverflowModes.Ellipsis;
+        tooltips = AudioDeviceTooltips.Create(dropdown, row.transform);
+        if (tooltips == null) Plugin.Instance?.ReportTooltipUnavailable();
         RefreshOptions();
         dropdown.gameObject.SetActive(true);
         PositionRow();
@@ -137,12 +140,14 @@ internal sealed class NativeAudioSettings : MonoBehaviour
     private void Selected(int index)
     {
         if (index >= 0 && index < identifiers.Count) plugin?.Preview(identifiers[index]);
+        if (dropdown != null && index >= 0 && index < dropdown.options.Count) tooltips?.SetSelection(dropdown.options[index].text);
     }
 
     private void Expanded(bool expanded)
     {
         if (settings != null) settings.BlockNavigation(expanded);
         if (status != null) status.enabled = !expanded;
+        if (dropdown != null) tooltips?.SetExpanded(dropdown, expanded);
     }
 
     private void LateUpdate() => PositionRow();
@@ -201,6 +206,7 @@ internal sealed class NativeAudioSettings : MonoBehaviour
         dropdown.AddOptions(names);
         dropdown.SetValueWithoutNotify(selected);
         dropdown.RefreshShownValue();
+        tooltips?.SetSelection(names[selected]);
     }
 
     internal void SetNavigation(Toggle previous, Button back, Button ok)

@@ -63,6 +63,7 @@ public sealed class Plugin : BaseUnityPlugin
     internal void Save() { if (preference != null) preference.Value = Selection; }
     internal void Revert() { if (preference != null && Selection != preference.Value) Preview(preference.Value); }
     internal void Refresh() => nextPoll = 0;
+    internal void ReportTooltipUnavailable() => Logger.LogWarning("Audio device tooltips could not find Valheim's tooltip template. Device selection remains available.");
     private void PreferenceChanged(object sender, EventArgs args) { if (preference != null) Preview(preference.Value); }
 
     private void Update()
