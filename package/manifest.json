@@ -2,7 +2,7 @@
   "name": "Custom_Audio_Output_Device",
   "version_number": "1.0.1",
   "website_url": "https://github.com/AugusDogus/Soundheim",
-  "description": "Select a custom audio output device directly in Valheim's Audio settings. Linux PulseAudio/PipeWire support; experimental Windows support.",
+  "description": "Select a custom audio output device directly in Valheim's Audio settings. Supports Windows and Linux with PulseAudio or PipeWire.",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2350"
   ]

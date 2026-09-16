@@ -183,7 +183,7 @@ internal sealed class NativeAudioSettings : MonoBehaviour
     {
         if (plugin == null || dropdown == null) return;
         if (!dropdown.IsExpanded && (shownDevices != plugin.Devices || shownSelection != plugin.Selection)) RefreshOptions();
-        if (status != null) status.text = (plugin.Experimental ? "Windows support is experimental.\n" : "") + plugin.Status;
+        if (status != null) status.text = plugin.Status;
     }
 
     private void RefreshOptions()

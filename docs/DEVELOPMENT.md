@@ -60,10 +60,10 @@ Soldier runtime to verify audio discovery when the container has no `pactl`.
 In that case, the mod calls `steam-runtime-launch-client --alongside-steam`
 to run the host command. Arguments stay separate, without a command shell.
 
-Windows support remains experimental, with one successful user test on Windows. It uses an
+The Windows backend uses an
 undocumented per-app audio policy interface, with IDs and ABI layout referenced
-from EarTrumpet. Check Windows 10 and 11 with speakers, USB/Bluetooth devices,
-unplug/reconnect, System default, and OK/Back before changing this support label.
+from EarTrumpet. When changing this backend, check Windows 10 and 11 with speakers,
+USB/Bluetooth devices, unplug/reconnect, System default, and OK/Back.
 Native handles and COM apartments are released on the worker thread. The code
 never calls a system-wide default-endpoint setter.
 

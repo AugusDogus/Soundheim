@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Soundheim.Audio;
 
-// Experimental, undocumented per-app policy ABI. GUIDs and slot order verified
+// Undocumented per-app policy ABI. GUIDs and slot order verified
 // against EarTrumpet's AudioPolicyConfigFactory interfaces. See THIRD-PARTY-NOTICES.md.
 internal sealed class WindowsAudioPolicy : IDisposable
 {
@@ -35,7 +35,7 @@ internal sealed class WindowsAudioPolicy : IDisposable
             var older = new Guid("2A59116D-6C4F-45E0-A74F-707E3FEF9258");
             result = RoGetActivationFactory(name.Pointer, ref older, out pointer);
         }
-        WindowsCom.Check(result, "Open experimental Windows per-app audio policy");
+        WindowsCom.Check(result, "Open Windows per-app audio policy");
         factory = new WindowsCom(pointer);
     }
 
