@@ -4,30 +4,32 @@ using UnityEngine.UI;
 
 namespace Soundheim;
 
-// UITooltip fills its text before showing the panel. Size this mod's cloned
-// tooltip on activation, preserving native padding and the maximum wrap width.
+// UITooltip fills its text before showing the panel. Serialized references are
+// remapped to the visible clone, so measurements never modify the template.
 internal sealed class AudioTooltipSize : MonoBehaviour
 {
-    private float maximumWidth;
+    [SerializeField] private RectTransform? panel;
+    [SerializeField] private VerticalLayoutGroup? layout;
+    [SerializeField] private TMP_Text[] labels = [];
+
+    internal void Initialize(RectTransform panel, VerticalLayoutGroup layout, params TMP_Text[] labels)
+    {
+        this.panel = panel;
+        this.layout = layout;
+        this.labels = labels;
+    }
 
     private void OnEnable()
     {
-        if (transform.childCount == 0 || transform.GetChild(0) is not RectTransform panel) return;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
-        if (maximumWidth == 0) maximumWidth = panel.rect.width;
-
+        if (panel == null || layout == null) return;
         float width = 0;
-        foreach (TMP_Text text in panel.GetComponentsInChildren<TMP_Text>())
+        foreach (TMP_Text text in labels)
         {
-            float padding = Mathf.Max(0, panel.rect.width - text.rectTransform.rect.width);
             float preferred = text.GetPreferredValues(text.text, Mathf.Infinity, Mathf.Infinity).x;
-            width = Mathf.Max(width, preferred + padding);
+            width = Mathf.Max(width, preferred);
         }
-        if (width <= 0 || maximumWidth <= 0) return;
-
-        ContentSizeFitter fitter = panel.GetComponent<ContentSizeFitter>();
-        if (fitter != null) fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-        panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Min(maximumWidth, Mathf.Ceil(width)));
+        width = Mathf.Min(400, Mathf.Ceil(width) + layout.padding.horizontal);
+        panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
     }
 }

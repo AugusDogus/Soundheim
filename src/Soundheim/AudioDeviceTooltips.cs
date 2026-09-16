@@ -4,23 +4,56 @@ using UnityEngine.UI;
 
 namespace Soundheim;
 
-// Uses Valheim's tooltip behavior and artwork, with plain text for device names.
+// Uses Valheim's tooltip behavior and font with a consistent, plain-text panel.
 internal sealed class AudioDeviceTooltips(GameObject prefab, UITooltip selected)
 {
     internal static AudioDeviceTooltips? Create(TMP_Dropdown dropdown, Transform parent)
     {
-        foreach (UITooltip source in Resources.FindObjectsOfTypeAll<UITooltip>())
-        {
-            if (source.m_tooltipPrefab == null) continue;
-            GameObject prefab = Object.Instantiate(source.m_tooltipPrefab, parent);
-            prefab.name = "Audio device tooltip template";
-            prefab.SetActive(false);
-            foreach (TMP_Text text in prefab.GetComponentsInChildren<TMP_Text>(true)) text.richText = false;
-            prefab.AddComponent<AudioTooltipSize>();
-            UITooltip selected = Attach(dropdown.gameObject, prefab, dropdown.captionText?.text ?? "");
-            return new AudioDeviceTooltips(prefab, selected);
-        }
-        return null;
+        TMP_Text style = dropdown.captionText;
+        if (style == null) return null;
+        // Loaded native tooltip prefabs differ between the menu and a world.
+        // Own the hierarchy that UITooltip fills and AudioTooltipSize measures.
+        var prefab = new GameObject("Audio device tooltip template", typeof(RectTransform));
+        prefab.SetActive(false);
+        prefab.transform.SetParent(parent, false);
+        var panelObject = new GameObject("Panel", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
+        panelObject.transform.SetParent(prefab.transform, false);
+        var panel = panelObject.GetComponent<RectTransform>();
+        panel.anchorMin = panel.anchorMax = new Vector2(0.5f, 0.5f);
+        panel.pivot = new Vector2(0, 1);
+        panel.anchoredPosition = new Vector2(16, -16);
+        panel.sizeDelta = new Vector2(400, 0);
+        var background = panelObject.GetComponent<Image>();
+        background.color = new Color(0, 0, 0, 0.9f);
+        background.raycastTarget = false;
+        var layout = panelObject.GetComponent<VerticalLayoutGroup>();
+        layout.padding = new RectOffset(12, 12, 8, 8);
+        layout.spacing = 4;
+        layout.childControlWidth = layout.childControlHeight = true;
+        layout.childForceExpandWidth = true;
+        layout.childForceExpandHeight = false;
+        panelObject.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        TMP_Text topic = CreateLabel(panel, style, "Topic", style.color, TextAlignmentOptions.Center);
+        TMP_Text text = CreateLabel(panel, style, "Text", Color.white, TextAlignmentOptions.Left);
+        prefab.AddComponent<AudioTooltipSize>().Initialize(panel, layout, topic, text);
+        UITooltip selected = Attach(dropdown.gameObject, prefab, style.text);
+        return new AudioDeviceTooltips(prefab, selected);
+    }
+
+    private static TMP_Text CreateLabel(Transform parent, TMP_Text style, string name, Color color, TextAlignmentOptions alignment)
+    {
+        var obj = new GameObject(name, typeof(RectTransform));
+        obj.transform.SetParent(parent, false);
+        var text = obj.AddComponent<TextMeshProUGUI>();
+        text.font = style.font;
+        text.fontSharedMaterial = style.fontSharedMaterial;
+        text.fontSize = style.fontSizeMax;
+        text.color = color;
+        text.alignment = alignment;
+        text.richText = false;
+        text.raycastTarget = false;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        return text;
     }
 
     internal void SetSelection(string name)
