@@ -81,15 +81,34 @@ internal sealed class NativeAudioSettings : MonoBehaviour
         foreach (TMP_Text text in dropdown.GetComponentsInChildren<TMP_Text>(true))
             if (text != dropdown.captionText && text != dropdown.itemText &&
                 (dropdown.template == null || !text.transform.IsChildOf(dropdown.template))) text.enabled = false;
-        if (dropdown.captionText != null) dropdown.captionText.richText = false;
-        if (dropdown.itemText != null) dropdown.itemText.richText = false;
+        ConfigureDeviceText(dropdown.captionText);
+        ConfigureDeviceText(dropdown.itemText);
         status = Label(row.transform, font, "", 0, 48, 1, 64);
         status.fontSize = Math.Min(font.fontSize, 16);
         status.enableAutoSizing = false;
         status.alignment = TextAlignmentOptions.TopLeft;
+        status.textWrappingMode = TextWrappingModes.Normal;
+        status.overflowMode = TextOverflowModes.Ellipsis;
         RefreshOptions();
         dropdown.gameObject.SetActive(true);
         PositionRow();
+    }
+
+    private static void ConfigureDeviceText(TMP_Text? text)
+    {
+        if (text == null) return;
+        text.richText = false;
+        text.textWrappingMode = TextWrappingModes.NoWrap;
+        text.overflowMode = TextOverflowModes.Ellipsis;
+        text.enableAutoSizing = true;
+        text.fontSizeMax = text.fontSize;
+        text.fontSizeMin = Math.Min(16, text.fontSizeMax);
+        // Stretch with the control, reserving space inside both edges.
+        RectTransform rect = text.rectTransform;
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = new Vector2(16, 0);
+        rect.offsetMax = new Vector2(-16, 0);
     }
 
     private static TMP_Text Label(Transform parent, TMP_Text style, string text, float x, float y, float width, float height)
@@ -120,7 +139,11 @@ internal sealed class NativeAudioSettings : MonoBehaviour
         if (index >= 0 && index < identifiers.Count) plugin?.Preview(identifiers[index]);
     }
 
-    private void Expanded(bool expanded) { if (settings != null) settings.BlockNavigation(expanded); }
+    private void Expanded(bool expanded)
+    {
+        if (settings != null) settings.BlockNavigation(expanded);
+        if (status != null) status.enabled = !expanded;
+    }
 
     private void LateUpdate() => PositionRow();
     private void PositionRow()
@@ -155,7 +178,7 @@ internal sealed class NativeAudioSettings : MonoBehaviour
     {
         if (plugin == null || dropdown == null) return;
         if (!dropdown.IsExpanded && (shownDevices != plugin.Devices || shownSelection != plugin.Selection)) RefreshOptions();
-        if (status != null) status.text = (plugin.Experimental ? "Windows support is experimental and untested.\n" : "") + plugin.Status;
+        if (status != null) status.text = (plugin.Experimental ? "Windows support is experimental.\n" : "") + plugin.Status;
     }
 
     private void RefreshOptions()
