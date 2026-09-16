@@ -13,6 +13,8 @@ Only the player needs this mod. Nothing is installed on the server.
 2. Choose **Output device**, below the existing audio controls. Changes preview immediately.
 3. Click **OK** to remember your choice. **Back** restores the saved choice.
 
+Hover over the selected device or an option in the menu to see its full name.
+
 **System default** follows your operating system's default output. The mod routes
 Valheim's audio; it does not change the system default or move other applications.
 Device lists refresh automatically. If your selected device disconnects, the mod
