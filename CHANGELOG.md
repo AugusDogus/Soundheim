@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.2 (2026-09-19)
 
 - Restore saved Windows outputs when a new game session starts on another device despite a matching Windows preference.
 - Wait for active game audio before restoring its output, without resetting correctly routed sessions.
