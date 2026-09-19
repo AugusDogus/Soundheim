@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Restore saved Windows outputs when a new game session starts on another device despite a matching Windows preference.
+- Wait for active game audio before restoring its output, without resetting correctly routed sessions.
+
 ## 1.0.1 (2026-09-15)
 
 - Use a consistent tooltip panel in both the main menu and a loaded world.

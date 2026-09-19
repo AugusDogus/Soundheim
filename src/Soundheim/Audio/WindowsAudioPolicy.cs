@@ -57,20 +57,34 @@ internal sealed class WindowsAudioPolicy : IDisposable
         return factory.Method<SetEndpoint>(25)(factory.Pointer, pid, 0, role, value.Pointer);
     }
 
-    public void Apply(uint pid, string id)
+    public void Apply(uint pid, string id, bool refresh = false)
     {
         string endpoint = id.Length == 0 ? "" : Prefix + id + Suffix;
-        string console = Read(pid, 0);
-        string multimedia = Read(pid, 1);
-        if (console == endpoint && multimedia == endpoint) return;
-        WindowsCom.Check(Write(pid, 0, endpoint), "Set Valheim console output");
-        int result = Write(pid, 1, endpoint);
-        if (result < 0)
+        Apply(endpoint, role => Read(pid, role), (role, value) => Write(pid, role, value), refresh);
+    }
+
+    internal static void Apply(string endpoint, Func<int, string> read, Func<int, string, int> write, bool refresh)
+    {
+        string console = read(0);
+        string multimedia = read(1);
+        bool matches = string.Equals(console, endpoint, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(multimedia, endpoint, StringComparison.OrdinalIgnoreCase);
+        if (matches && !refresh) return;
+        // Persisted preferences can match while a new game session still plays
+        // on the default device. Recreate the user's off/on change in that case.
+        if (matches && endpoint.Length > 0) WritePair("");
+        WritePair(endpoint);
+
+        void WritePair(string value)
         {
-            int rollback = Write(pid, 0, console);
-            if (rollback < 0)
-                throw new COMException($"Windows only partly applied the output and could not restore it (0x{rollback:X8}). Select System default or use Windows Volume mixer.", rollback);
-            WindowsCom.Check(result, "Set Valheim multimedia output (previous console preference restored)");
+            int result = write(0, value);
+            if (result >= 0) result = write(1, value);
+            if (result >= 0) return;
+            int restoreConsole = write(0, console);
+            int restoreMultimedia = write(1, multimedia);
+            if (restoreConsole < 0 || restoreMultimedia < 0)
+                throw new COMException($"Windows could not apply or restore Valheim's output preferences (console 0x{restoreConsole:X8}, multimedia 0x{restoreMultimedia:X8}). Select System default or use Windows Volume mixer.", result);
+            WindowsCom.Check(result, "Set Valheim output (previous preferences restored)");
         }
     }
 
