@@ -15,10 +15,12 @@ Only the player needs this mod. Nothing is installed on the server.
 
 Hover over the selected device or an option in the menu to see its full name.
 
-**System default** follows your operating system's default output. The mod routes
-Valheim's audio; it does not change the system default or move other applications.
-Device lists refresh automatically. If your selected device disconnects, the mod
-keeps its preference and retries when it returns.
+**System default** selects your operating system's current default output. The mod
+routes Valheim's audio; it does not change the system default or move other applications.
+Your saved output is applied once at startup. Devices refresh when you open the
+Audio tab, and selecting an output applies it immediately. There is no periodic
+polling during gameplay. After connecting a device or changing the system default,
+reopen Audio Settings to refresh and reapply your selection.
 
 ## Platforms
 

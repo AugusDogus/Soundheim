@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.3 (2026-10-03)
+
+- Remove five-second audio polling that caused recurring gameplay stalls on Linux.
+- Apply the saved output once at startup, then refresh only when opening Audio Settings or changing the selection.
+- Preserve audio discovery errors and retry only on an explicit settings action.
+- Reopen Audio Settings after reconnecting an output device to reapply the saved selection.
+
 ## 1.0.2 (2026-09-19)
 
 - Restore saved Windows outputs when a new game session starts on another device despite a matching Windows preference.

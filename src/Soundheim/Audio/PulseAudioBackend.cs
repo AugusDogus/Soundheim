@@ -22,7 +22,7 @@ internal sealed class PulseAudioBackend(int processId, Func<string[], string> co
         string target = deviceId.Length == 0 ? command(["get-default-sink"]).Trim() : deviceId;
         Sink? sink = ReadSinks(command(["--format=json", "list", "sinks"]))
             .FirstOrDefault(candidate => candidate.Device.Id == target);
-        if (sink == null) return "Selected output is disconnected. Keeping your preference and waiting for it to return.";
+        if (sink == null) return "Selected output is disconnected. Your preference is saved; reconnect it and reopen Audio Settings to retry.";
 
         JArray streams = JArray.Parse(command(["--format=json", "list", "sink-inputs"]));
         int count = 0;
@@ -36,7 +36,7 @@ internal sealed class PulseAudioBackend(int processId, Func<string[], string> co
             if (RequiredIndex(stream, "sink") != sink.Index)
                 command(["move-sink-input", index.ToString(CultureInfo.InvariantCulture), sink.Device.Id]);
         }
-        return count == 0 ? "Waiting for Valheim's audio stream. Your selection will apply when it starts." :
+        return count == 0 ? "Valheim's audio stream is not available yet. Reopen Audio Settings to apply your selection once audio starts." :
             "";
     });
 

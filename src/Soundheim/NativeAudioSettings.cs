@@ -43,7 +43,6 @@ internal sealed class NativeAudioSettings : MonoBehaviour
         component.sliderRect = volume.GetComponent<RectTransform>();
         component.volumeRect = volumeText.rectTransform;
         component.Create(audio, lastControl, template, font);
-        Plugin.Instance.Refresh();
     }
 
     private void Create(GameAudioSettings audio, Toggle lastControl, GuiDropdown template, TMP_Text font)
@@ -219,7 +218,6 @@ internal sealed class NativeAudioSettings : MonoBehaviour
         GuiUtils.SetNavigationUp(ok, dropdown);
     }
 
-    private void OnEnable() => plugin?.Refresh();
     private void OnDisable() { if (dropdown != null && dropdown.IsExpanded) { dropdown.Hide(); Expanded(false); } }
     private void OnDestroy()
     {
@@ -236,8 +234,11 @@ internal sealed class NativeAudioSettings : MonoBehaviour
     [HarmonyPatch(typeof(GameAudioSettings), "OnTabOpen")]
     private static class NavigationPatch
     {
-        private static void Postfix(GameAudioSettings __instance, Toggle ___m_continousMusic, Button backButton, Button okButton) =>
+        private static void Postfix(GameAudioSettings __instance, Toggle ___m_continousMusic, Button backButton, Button okButton)
+        {
             __instance.GetComponent<NativeAudioSettings>()?.SetNavigation(___m_continousMusic, backButton, okButton);
+            Plugin.Instance?.Refresh();
+        }
     }
     [HarmonyPatch(typeof(GameAudioSettings), "OnOkAsync")]
     private static class SavePatch { private static void Prefix() => Plugin.Instance?.Save(); }

@@ -46,7 +46,8 @@ bun test tests/
 The TypeScript package checks and JavaScript version checks use Bun's test runner.
 
 The C# tests cover device discovery, exact process-ID filtering, default-device
-selection, reconnects, failures, and the private game fields used by the settings hooks.
+selection, explicit reconnect retries, failures, idle behavior without polling,
+coalesced selection changes, and the private game fields used by the settings hooks.
 They do not render Unity UI. Check the Audio tab's layout, dropdown navigation,
 preview, OK, Back, and reopening settings in game before releasing.
 

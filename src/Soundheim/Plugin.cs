@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -18,93 +17,46 @@ public sealed class Plugin : BaseUnityPlugin
     public const string PluginVersion = "1.0.2";
 
     internal static Plugin? Instance { get; private set; }
-    internal IReadOnlyList<AudioDevice> Devices { get; private set; } = Array.Empty<AudioDevice>();
-    internal string Selection { get; private set; } = "";
-    internal string Status { get; private set; } = "Reading audio outputs...";
+    internal IReadOnlyList<AudioDevice> Devices => output?.Devices ?? Array.Empty<AudioDevice>();
+    internal string Selection => output?.Selection ?? "";
+    internal string Status => output?.Status ?? "Audio output selection is unavailable on this platform.";
     private ConfigEntry<string>? preference;
-    private IAudioBackend? backend;
-    private Task<PollResult>? pending;
-    private float nextPoll;
-    private int revision;
-    private string lastError = "";
+    private AudioOutput? output;
     private readonly Harmony harmony = new(PluginId);
-
-    private sealed class PollResult(int revision, AudioResult<IReadOnlyList<AudioDevice>> devices, AudioResult<string> route)
-    {
-        public int Revision { get; } = revision;
-        public AudioResult<IReadOnlyList<AudioDevice>> Devices { get; } = devices;
-        public AudioResult<string> Route { get; } = route;
-    }
 
     private void Awake()
     {
         if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null) { enabled = false; return; }
         using var process = Process.GetCurrentProcess();
+        IAudioBackend backend;
         if (Application.platform == RuntimePlatform.LinuxPlayer) backend = new PulseAudioBackend(process.Id, new Pactl().Run);
         else if (Application.platform == RuntimePlatform.WindowsPlayer) backend = new WindowsAudioBackend(process.Id);
         else { Logger.LogWarning($"{PluginName} supports Linux and Windows only."); enabled = false; return; }
         preference = Config.Bind("Audio", "Output device", "", "Stable output identifier. Empty follows the system default. Select a device in Settings > Audio.");
-        Selection = preference.Value;
+        output = new AudioOutput(backend, preference.Value);
+        output.Failed += LogError;
         preference.SettingChanged += PreferenceChanged;
         Instance = this;
         harmony.PatchAll(typeof(NativeAudioSettings).Assembly);
         Logger.LogInfo($"{PluginName} loaded. Select your output in Settings > Audio.");
     }
 
-    internal void Preview(string id)
-    {
-        Selection = id;
-        revision++;
-        nextPoll = 0;
-        Status = "Applying output preference...";
-    }
+    internal void Preview(string id) => output?.Select(id);
 
     internal void Save() { if (preference != null) preference.Value = Selection; }
     internal void Revert() { if (preference != null && Selection != preference.Value) Preview(preference.Value); }
-    internal void Refresh() => nextPoll = 0;
+    internal void Refresh() => output?.Refresh();
     internal void ReportTooltipUnavailable() => Logger.LogWarning("Audio device tooltips could not find the dropdown's text style. Device selection remains available.");
     private void PreferenceChanged(object sender, EventArgs args) { if (preference != null) Preview(preference.Value); }
 
-    private void Update()
-    {
-        if (backend == null) return;
-        if (pending != null && pending.IsCompleted)
-        {
-            Task<PollResult> completed = pending;
-            pending = null;
-            if (completed.IsFaulted) ReportError(completed.Exception?.GetBaseException().Message ?? "Unknown audio error.");
-            else
-            {
-                PollResult result = completed.GetAwaiter().GetResult();
-                if (result.Devices is AudioResult<IReadOnlyList<AudioDevice>>.Success devices) Devices = devices.Value;
-                else if (result.Devices is AudioResult<IReadOnlyList<AudioDevice>>.Failure failure) ReportError(failure.Message);
-                if (result.Revision == revision)
-                {
-                    if (result.Route is AudioResult<string>.Success route) { Status = route.Value; lastError = ""; }
-                    else if (result.Route is AudioResult<string>.Failure error) ReportError(error.Message);
-                }
-            }
-        }
-        if (pending != null || Time.unscaledTime < nextPoll) return;
-        nextPoll = Time.unscaledTime + 5;
-        string selected = Selection;
-        int requestRevision = revision;
-        IAudioBackend selectedBackend = backend;
-        // Keep process and COM operations off the game's main thread. Never overlap polls.
-        pending = Task.Run(() => new PollResult(requestRevision, selectedBackend.ListOutputs(), selectedBackend.Route(selected)));
-    }
-
-    internal void ReportError(string message)
-    {
-        Status = "Couldn't update audio output. Retrying automatically. Details are in the game log.";
-        if (message == lastError) return;
-        lastError = message;
-        Logger.LogWarning(message);
-    }
+    private void Update() => output?.Update();
+    internal void ReportError(string message) => output?.ReportError(message);
+    private void LogError(string message) => Logger.LogWarning(message);
 
     private void OnDestroy()
     {
         if (preference != null) preference.SettingChanged -= PreferenceChanged;
+        if (output != null) output.Failed -= LogError;
         harmony.UnpatchSelf();
         if (Instance == this) Instance = null;
     }

@@ -87,7 +87,7 @@ public sealed class PulseAudioTests
     {
         var result = new PulseAudioBackend(42, new Server().Run).Route("headset");
         Assert.IsInstanceOfType<AudioResult<string>.Success>(result);
-        if (result is AudioResult<string>.Success success) StringAssert.Contains(success.Value, "Waiting");
+        if (result is AudioResult<string>.Success success) StringAssert.Contains(success.Value, "not available yet");
     }
 
     [DataTestMethod]

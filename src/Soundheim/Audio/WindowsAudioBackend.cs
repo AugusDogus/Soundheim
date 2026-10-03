@@ -13,12 +13,12 @@ internal sealed class WindowsAudioBackend(int processId) : IAudioBackend
         using var apartment = new WindowsCom.Apartment();
         IReadOnlyList<AudioDevice> outputs = WindowsOutputs.List();
         if (deviceId.Length > 0 && !outputs.Any(device => device.Id == deviceId))
-            return "Selected output is disconnected. Keeping your preference and waiting for it to return.";
+            return "Selected output is disconnected. Your preference is saved; reconnect it and reopen Audio Settings to retry.";
         bool refresh = false;
         if (deviceId.Length > 0)
         {
             IReadOnlyList<string> active = WindowsAudioSessions.ActiveOutputs((uint)processId, outputs);
-            if (active.Count == 0) return "Waiting for Valheim's audio stream. Your selection will apply when it starts.";
+            if (active.Count == 0) return "Valheim's audio stream is not available yet. Reopen Audio Settings to apply your selection once audio starts.";
             refresh = active.Any(id => !string.Equals(id, deviceId, StringComparison.OrdinalIgnoreCase));
         }
         using var policy = new WindowsAudioPolicy();
