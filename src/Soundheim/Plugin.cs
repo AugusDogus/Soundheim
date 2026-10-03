@@ -14,7 +14,7 @@ public sealed class Plugin : BaseUnityPlugin
 {
     public const string PluginId = "augusdogus.mods.Soundheim";
     public const string PluginName = "Custom Audio Output Device";
-    public const string PluginVersion = "1.0.2";
+    public const string PluginVersion = "1.0.3";
 
     internal static Plugin? Instance { get; private set; }
     internal IReadOnlyList<AudioDevice> Devices => output?.Devices ?? Array.Empty<AudioDevice>();
