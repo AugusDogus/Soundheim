@@ -1,3 +1,10 @@
+# Licensing scope
+
+Soundheim's original contributions are MIT-licensed. The EarTrumpet-derived
+Windows audio-policy material below retains its upstream terms, including the
+named-entity exclusions. Those terms are not the standard unrestricted MIT
+license, and the project's MIT grant does not override them.
+
 # EarTrumpet
 
 The Windows audio-policy interface identifiers and ABI layout are based on

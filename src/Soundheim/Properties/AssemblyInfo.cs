@@ -4,3 +4,5 @@ using System.Reflection;
 [assembly: AssemblyProduct("Custom Audio Output Device")]
 [assembly: AssemblyVersion("1.0.3.0")]
 [assembly: AssemblyFileVersion("1.0.3.0")]
+
+[assembly: AssemblyCopyright("Copyright (c) 2026 AugusDogus (original contributions)")]

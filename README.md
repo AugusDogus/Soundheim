@@ -47,3 +47,11 @@ Choose **System default** and save before removing the mod if you want to clear 
 
 See [development and testing](docs/DEVELOPMENT.md) and [repository layout](docs/REPOSITORY.md).
 Release tooling comes from [ValheimModTemplate](https://github.com/AugusDogus/ValheimModTemplate).
+
+## License
+
+Original AugusDogus contributions are licensed under [MIT](LICENSE.md).
+EarTrumpet-derived Windows audio-policy material retains its separate terms,
+including named-entity exclusions. See
+[third-party notices](package/THIRD-PARTY-NOTICES.md); the MIT grant does not
+override those restrictions.
